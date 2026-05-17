@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('assignments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('class_id')->constrained('classes')->cascadeOnDelete();
+            $table->foreignId('teacher_id')->constrained('users')->cascadeOnDelete();
+            $table->string('title');
+            $table->text('description');
+            $table->dateTime('due_date');
+            $table->decimal('points', 8, 2)->nullable();
+            $table->boolean('allow_late_submission')->default(true);
+            $table->string('file_path')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('assignments');
+    }
+};
